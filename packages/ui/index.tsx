@@ -1,2 +1,5 @@
 import * as React from "react";
-export * from "./Button";
+export * from "./HamburgerMenuIcon/HamburgerMenuIcon";
+export * from "./Logo/Logo";
+export * from "./NavArrowIcons/NavArrowIcons";
+export * from "./SearchBar/SearchBar";

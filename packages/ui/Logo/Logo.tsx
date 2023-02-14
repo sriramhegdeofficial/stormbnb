@@ -1,4 +1,5 @@
 import React from "react";
+import { css } from "./../stitches.config";
 
 const LogoSvgMain = (
   <svg
@@ -69,12 +70,11 @@ const LogoSvgLite = (
     />
   </svg>
 );
-
-export interface IProps {
+export interface ILogoProps {
   variant?: string;
 }
 
-export const Logo = ({ variant = "default" }: IProps) => {
+export const Logo = ({ variant = "default" }: ILogoProps) => {
   const renderLogo = (variant: string): JSX.Element => {
     switch (variant) {
       case "default":
@@ -86,5 +86,15 @@ export const Logo = ({ variant = "default" }: IProps) => {
     }
   };
 
-  return <>{renderLogo(variant)}</>;
+  return (
+    <>
+      <div className={wrapper()}>{renderLogo(variant)}</div>
+    </>
+  );
 };
+
+const wrapper = css({
+  width: "fit-content",
+  height: "fit-content",
+  cursor: "pointer",
+});

@@ -5,7 +5,6 @@ export const HamburgerMenuIcon = () => {
     <div className={wrapper()}>
       <div></div>
       <div></div>
-      {/* <div className={menuCss()}></div> */}
     </div>
   );
 };
@@ -24,7 +23,7 @@ const wrapper = css({
     border: "none",
     outline: "none",
     userSelect: "none",
-    transition: "all 400ms ease",
+    transition: "$normal",
   },
   "&:hover": {
     div: {

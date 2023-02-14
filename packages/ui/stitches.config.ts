@@ -22,9 +22,13 @@ export const {
         barelyGray: '#BABABA',
         white: '#FFFFFF',
       },
+      transitions: {
+        normal: 'all 400ms ease',
+      },
     },
     media: {
       bp1: '(min-width: 480px)',
     },
+    
   
   });
