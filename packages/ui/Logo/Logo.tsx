@@ -1,5 +1,6 @@
 import React from "react";
 import { css } from "./../stitches.config";
+import { globalStyles } from "../globalReset";
 
 const LogoSvgMain = (
   <svg
@@ -75,6 +76,7 @@ export interface ILogoProps {
 }
 
 export const Logo = ({ variant = "default" }: ILogoProps) => {
+  globalStyles();
   const renderLogo = (variant: string): JSX.Element => {
     switch (variant) {
       case "default":

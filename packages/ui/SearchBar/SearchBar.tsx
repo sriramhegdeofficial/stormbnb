@@ -1,7 +1,9 @@
 import { css } from "./../stitches.config";
 import { AiOutlineSearch } from "react-icons/ai";
+import { globalStyles } from "../globalReset";
 
 export const SearchBar = () => {
+  globalStyles();
   return (
     <>
       <div className={wrapper()}>

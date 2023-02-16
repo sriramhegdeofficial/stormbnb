@@ -1,15 +1,21 @@
 import { css } from "./../stitches.config";
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
+import { globalStyles } from "../globalReset";
 
 export interface INavArrowProps {
   direction?: string;
+  clickHandler?: () => void;
 }
 
-export const NavArrowIcons = ({ direction = "left" }: INavArrowProps) => {
+export const NavArrowIcons = ({
+  direction = "left",
+  clickHandler,
+}: INavArrowProps) => {
+  globalStyles();
   return (
     <>
-      <div className={wrapper()}>
+      <div className={wrapper()} onClick={clickHandler}>
         {direction === "left" ? (
           <AiOutlineLeft style={{ strokeWidth: "30" }} />
         ) : (

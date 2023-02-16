@@ -1,6 +1,8 @@
 import { css } from "./../stitches.config";
+import { globalStyles } from "../globalReset";
 
 export const HamburgerMenuIcon = () => {
+  globalStyles();
   return (
     <div className={wrapper()}>
       <div></div>
