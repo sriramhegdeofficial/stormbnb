@@ -6,6 +6,7 @@ module.exports = {
     "@storybook/addon-interactions",
     "@storybook/addon-actions",
     "@storybook/addon-docs",
+    "@storybook/addon-next",
   ],
   framework: "@storybook/react",
 };

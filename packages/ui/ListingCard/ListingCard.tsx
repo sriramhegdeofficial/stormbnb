@@ -1,16 +1,20 @@
 import { css } from "./../stitches.config";
 import { globalStyles } from "../globalReset";
 import { AiFillStar } from "react-icons/ai";
+import Image from "next/image";
 
 export const ListingCard = () => {
   globalStyles();
+
   return (
     <>
       <div className={wrapper()}>
-        <img
+        <Image
           className={image()}
           src="https://picsum.photos/500/360"
           alt="listing image"
+          width={600}
+          height={360}
         />
         <div className={detailsWrapper()}>
           <span className={title()}>CapeTown, SA</span>
