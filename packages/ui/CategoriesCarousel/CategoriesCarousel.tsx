@@ -1,75 +1,131 @@
-import { css, globalCss } from "./../stitches.config";
-import { NavArrowIcons } from "../NavArrowIcons/NavArrowIcons";
+import React from "react";
+import { css, theme } from "./../stitches.config";
 import { globalStyles } from "../globalReset";
-import * as React from "react";
+import { NavArrowIcons } from "../NavArrowIcons/NavArrowIcons";
 
-export const CategoriesCarousel = () => {
+export interface ICategoriesCarouselProps {
+  stepper?: number;
+  itemSpace?: number;
+}
+
+export const CategoriesCarousel = ({
+  stepper = 200,
+  itemSpace = 60,
+}: ICategoriesCarouselProps) => {
   globalStyles();
 
-  const [translateValue, setTranslateValue] = React.useState(0);
-  const ref = React.useRef<HTMLDivElement>(null);
-  const viewBoxRef = React.useRef<HTMLDivElement>(null);
+  const [sliderValue, setSliderValue] = React.useState<number>(0);
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  const carouselRef = React.useRef<HTMLDivElement>(null);
+  const scrollableWidth = React.useRef<number>(0);
+  const totalSteps = React.useRef<number>(0);
+  const lastStep = React.useRef<number>(0);
 
-  const moveLeft = () => {
-    if (viewBoxRef.current !== null && ref.current !== null) {
-      if (viewBoxRef.current.offsetLeft <= ref.current.offsetLeft) {
-        console.log(viewBoxRef.current.offsetLeft);
-        console.log(ref.current.offsetLeft);
-        setTranslateValue((prev) => prev - 200);
+  React.useEffect(() => {
+    if (wrapperRef.current !== null && carouselRef.current !== null) {
+      scrollableWidth.current =
+        carouselRef.current.offsetWidth - wrapperRef.current.offsetWidth;
+      totalSteps.current = Math.floor(scrollableWidth.current / stepper);
+      lastStep.current = scrollableWidth.current % stepper;
+    }
+  }, [wrapperRef.current?.offsetWidth, carouselRef.current?.offsetWidth]);
+
+  const translater = () => {
+    if (sliderValue <= totalSteps.current) {
+      return `translateX(-${sliderValue * stepper}px)`;
+    } else {
+      return `translateX(-${(sliderValue - 1) * stepper + lastStep.current}px)`;
+    }
+  };
+
+  const sliderHandler = (direction: string) => {
+    if (direction === "+") {
+      //do something
+      if (sliderValue < totalSteps.current + 1) {
+        setSliderValue(sliderValue + 1);
+      }
+    } else {
+      //something else
+
+      if (sliderValue > 0) {
+        setSliderValue(sliderValue - 1);
       }
     }
   };
 
-  const moveRight = () => {
-    if (viewBoxRef.current !== null && ref.current !== null) {
-      if (
-        viewBoxRef.current.offsetLeft + viewBoxRef.current.offsetWidth >=
-        ref.current?.offsetLeft + ref.current.offsetWidth
-      ) {
-        return;
-      }
-    }
-    setTranslateValue((prev) => prev + 200);
-  };
-
-  React.useEffect(() => {}, []);
+  const container = css({
+    width: "100%",
+    minWidth: "360px",
+    height: "80px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderBottom: `1px solid ${theme.colors.barelyGray}`,
+    columnGap: "40px",
+  });
 
   const wrapper = css({
-    width: "100%",
-    minWidth: "300px",
-    padding: "0px 16px",
-    height: "72px",
-    border: "1px solid black",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    columnGap: "16px",
-  });
-
-  const viewBox = css({
     flex: 1,
-    border: "3px dashed red",
     height: "100%",
-    overflowX: "scroll",
+    overflow: "hidden",
+    scrollBehavior: "smooth",
   });
 
-  const itemContainer = css({
-    width: "2200px",
-    minWidth: "100%",
+  const carouselWrapper = css({
+    width: "fit-content",
     height: "100%",
-    background: "pink",
     transition: "$normal",
-    transform: `translateX(${translateValue}px)`,
+    transform: translater(),
+    zIndex: "-100",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    scrollBehavior: "smooth",
+    columnGap: `${itemSpace}px`,
+    span: {
+      whiteSpace: "nowrap",
+      maxWidth: "300px",
+      width: "max-content",
+      display: "block",
+    },
   });
 
   return (
     <>
-      <div className={wrapper()}>
-        <NavArrowIcons direction="left" clickHandler={moveLeft} />
-        <div className={viewBox()} ref={viewBoxRef}>
-          <div className={itemContainer()} ref={ref}></div>
+      <div className={container()}>
+        <NavArrowIcons
+          direction="left"
+          clickHandler={() => sliderHandler("-")}
+          wrapperStyles={{
+            opacity: `${sliderValue > 0 ? "1" : "0"}`,
+            pointerEvents: `${sliderValue > 0 ? "auto" : "none"}`,
+          }}
+        />
+        <div className={wrapper()} ref={wrapperRef}>
+          <div className={carouselWrapper()} ref={carouselRef}>
+            <span>crib</span>
+            <span>house</span>
+            <span>bungalow</span>
+            <span>hotel & spa</span>
+            <span>restaurant</span>
+            <span>drink n dine</span>
+            <span>oyo</span>
+            <span>seaside</span>
+            <span>vacation & holiday</span>
+            <span>PG</span>
+          </div>
         </div>
-        <NavArrowIcons direction="right" clickHandler={moveRight} />
+        <NavArrowIcons
+          wrapperStyles={{
+            transition: "$normal",
+            // opacity: `${sliderValue <= totalSteps.current ? "1" : "0"}`,
+            // pointerEvents: `${
+            //   sliderValue <= totalSteps.current ? "auto" : "none"
+            // }`,
+          }}
+          direction="right"
+          clickHandler={() => sliderHandler("+")}
+        />
       </div>
     </>
   );

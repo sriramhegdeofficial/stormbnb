@@ -1,44 +1,56 @@
-import { css } from "./../stitches.config";
+import { theme } from "./../stitches.config";
 import { AiOutlineLeft } from "react-icons/ai";
 import { AiOutlineRight } from "react-icons/ai";
 import { globalStyles } from "../globalReset";
+import { styled, css } from "@stitches/react";
 
 export interface INavArrowProps {
   direction?: string;
-  clickHandler?: () => void;
+  clickHandler?: any;
+  arrowColor?: string;
+  bg?: string;
+  border?: string;
+  wrapperStyles?: object;
 }
 
 export const NavArrowIcons = ({
   direction = "left",
   clickHandler,
+  wrapperStyles = {},
+  arrowColor = `${theme.colors.black}`,
+  bg = `${theme.colors.white}`,
+  border = `${theme.colors.barelyGray}`,
 }: INavArrowProps) => {
   globalStyles();
+
+  const Wrapper = styled("div", {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "32px",
+    height: "32px",
+    aspectRatio: "1/1",
+    borderRadius: "50%",
+    border: `1px solid ${border}`,
+    cursor: "pointer",
+    transition: "scale 400ms ease",
+    outline: "none",
+    userSelect: "none",
+    background: `${bg}`,
+    "&:hover": {
+      transform: "scale(1.1)",
+    },
+  });
+
   return (
     <>
-      <div className={wrapper()} onClick={clickHandler}>
+      <Wrapper onClick={clickHandler} css={{ ...wrapperStyles }}>
         {direction === "left" ? (
-          <AiOutlineLeft style={{ strokeWidth: "30" }} />
+          <AiOutlineLeft style={{ strokeWidth: "30", color: arrowColor }} />
         ) : (
-          <AiOutlineRight style={{ strokeWidth: "30" }} />
+          <AiOutlineRight style={{ strokeWidth: "30", color: arrowColor }} />
         )}
-      </div>
+      </Wrapper>
     </>
   );
 };
-
-const wrapper = css({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "32px",
-  height: "32px",
-  borderRadius: "50%",
-  border: "1px solid $barelyGray",
-  cursor: "pointer",
-  transition: "$normal",
-  outline: "none",
-  userSelect: "none",
-  "&:hover": {
-    transform: "scale(1.1)",
-  },
-});

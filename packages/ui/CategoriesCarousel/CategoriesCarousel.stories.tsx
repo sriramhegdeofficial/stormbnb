@@ -15,9 +15,11 @@ export default {
 
 //👇 We create a “template” of how args map to rendering
 const Template: ComponentStory<typeof CategoriesCarousel> = (args) => (
-  <CategoriesCarousel />
+  <CategoriesCarousel {...args} />
 );
 
 export const Primary = Template.bind({});
 
-Primary.args = {};
+Primary.args = {
+  stepper: 400,
+};

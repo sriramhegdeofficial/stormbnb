@@ -15,7 +15,7 @@ export default {
 
 //👇 We create a “template” of how args map to rendering
 const Template: ComponentStory<typeof NavArrowIcons> = (args) => (
-  <NavArrowIcons direction={args.direction} />
+  <NavArrowIcons {...args} />
 );
 
 export const Primary = Template.bind({});
