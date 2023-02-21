@@ -1,131 +1,174 @@
 import React from "react";
 import { css, theme } from "./../stitches.config";
-import { globalStyles } from "../globalReset";
 import { NavArrowIcons } from "../NavArrowIcons/NavArrowIcons";
+import { useCarousel } from "use-carousel-hook";
+import { globalStyles } from "../globalReset";
 
-export interface ICategoriesCarouselProps {
-  stepper?: number;
-  itemSpace?: number;
-}
-
-export const CategoriesCarousel = ({
-  stepper = 200,
-  itemSpace = 60,
-}: ICategoriesCarouselProps) => {
+export const CategoriesCarousel: React.FC = () => {
   globalStyles();
 
-  const [sliderValue, setSliderValue] = React.useState<number>(0);
-  const wrapperRef = React.useRef<HTMLDivElement>(null);
-  const carouselRef = React.useRef<HTMLDivElement>(null);
-  const scrollableWidth = React.useRef<number>(0);
-  const totalSteps = React.useRef<number>(0);
-  const lastStep = React.useRef<number>(0);
-
-  React.useEffect(() => {
-    if (wrapperRef.current !== null && carouselRef.current !== null) {
-      scrollableWidth.current =
-        carouselRef.current.offsetWidth - wrapperRef.current.offsetWidth;
-      totalSteps.current = Math.floor(scrollableWidth.current / stepper);
-      lastStep.current = scrollableWidth.current % stepper;
-    }
-  }, [wrapperRef.current?.offsetWidth, carouselRef.current?.offsetWidth]);
-
-  const translater = () => {
-    if (sliderValue <= totalSteps.current) {
-      return `translateX(-${sliderValue * stepper}px)`;
-    } else {
-      return `translateX(-${(sliderValue - 1) * stepper + lastStep.current}px)`;
-    }
-  };
-
-  const sliderHandler = (direction: string) => {
-    if (direction === "+") {
-      //do something
-      if (sliderValue < totalSteps.current + 1) {
-        setSliderValue(sliderValue + 1);
-      }
-    } else {
-      //something else
-
-      if (sliderValue > 0) {
-        setSliderValue(sliderValue - 1);
-      }
-    }
-  };
+  const { ref, previous, next, position } = useCarousel<HTMLDivElement>();
 
   const container = css({
+    // border: "2px solid red",
     width: "100%",
-    minWidth: "360px",
     height: "80px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
     borderBottom: `1px solid ${theme.colors.barelyGray}`,
-    columnGap: "40px",
+    "@bp2": {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      // border: "2px solid green",
+      borderBottom: `1px solid ${theme.colors.barelyGray}`,
+      //padding: "0px 16px",
+      //minWidth: "900px",
+    },
   });
 
   const wrapper = css({
-    flex: 1,
+    width: "100%",
     height: "100%",
-    overflow: "hidden",
-    scrollBehavior: "smooth",
+    "@bp2": {
+      width: "90%",
+      height: "100%",
+      display: "flex",
+      position: "relative",
+      overflow: "hidden",
+    },
   });
 
-  const carouselWrapper = css({
-    width: "fit-content",
+  const normalWrapper = css({
+    flex: "1 0 auto",
+    width: "100%",
     height: "100%",
-    transition: "$normal",
-    transform: translater(),
-    zIndex: "-100",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    scrollBehavior: "smooth",
-    columnGap: `${itemSpace}px`,
+    overflowX: "scroll",
+    columnGap: "40px",
+    "&::-webkit-scrollbar": {
+      height: "3px",
+    },
+    "&::-webkit-scrollbar-track": {
+      boxShadow: "none",
+    },
+
+    "&::-webkit-scrollbar-thumb": {
+      backgroundColor: `${theme.colors.primary}`,
+      borderRadius: "20px",
+    },
     span: {
-      whiteSpace: "nowrap",
-      maxWidth: "300px",
+      display: "flex",
+      flex: "1 0 auto",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      textTransform: "capitalize",
+      fontSize: "0.75rem",
       width: "max-content",
-      display: "block",
+    },
+    "@bp2": {
+      display: "none",
+    },
+  });
+
+  const itemWrapper = css({
+    display: "none",
+    "@bp2": {
+      flex: "1 0 auto",
+      width: "100%",
+      height: "100%",
+      display: "flex",
+
+      span: {
+        display: "flex",
+        flex: "1 0 auto",
+        justifyContent: "center",
+        alignItems: "center",
+        textTransform: "capitalize",
+      },
+    },
+  });
+
+  const navIconRightWrapper = css({
+    display: "none",
+    "@bp2": {
+      display: "flex",
+      width: "max-content",
+      height: "max-content",
+      visibility: `${position.isAtEnd ? "hidden" : "visible"}`,
+    },
+  });
+
+  const navIconLeftWrapper = css({
+    display: "none",
+    "@bp2": {
+      display: "flex",
+      width: "max-content",
+      height: "max-content",
+      visibility: `${position.isAtStart ? "hidden" : "visible"}`,
     },
   });
 
   return (
     <>
       <div className={container()}>
-        <NavArrowIcons
-          direction="left"
-          clickHandler={() => sliderHandler("-")}
-          wrapperStyles={{
-            opacity: `${sliderValue > 0 ? "1" : "0"}`,
-            pointerEvents: `${sliderValue > 0 ? "auto" : "none"}`,
-          }}
-        />
-        <div className={wrapper()} ref={wrapperRef}>
-          <div className={carouselWrapper()} ref={carouselRef}>
-            <span>crib</span>
-            <span>house</span>
+        <div className={navIconLeftWrapper()}>
+          <NavArrowIcons
+            wrapperStyles={{
+              pointerEvents: `${position.isAtStart ? "none" : "auto"}`,
+            }}
+            direction="left"
+            clickHandler={() => previous(1)}
+          />
+        </div>
+        <div className={wrapper()} ref={ref}>
+          <div className={itemWrapper()}>
+            <span>Hotel & spa </span>
+            <span>beach</span>
+            <span>amazing views</span>
+            <span>farms</span>
+            <span>pubs</span>
+          </div>
+          <div className={itemWrapper()}>
+            <span>amazing pools</span>
+            <span>beach front</span>
+            <span>countryside</span>
+            <span>tiny homes</span>
+            <span>darshinis</span>
+          </div>
+          <div className={itemWrapper()}>
+            <span>earth homes</span>
             <span>bungalow</span>
-            <span>hotel & spa</span>
-            <span>restaurant</span>
-            <span>drink n dine</span>
-            <span>oyo</span>
-            <span>seaside</span>
-            <span>vacation & holiday</span>
-            <span>PG</span>
+            <span>castles</span>
+            <span>national parks</span>
+            <span>greenland</span>
+          </div>
+          <div className={normalWrapper()}>
+            <span>Hotel & spa </span>
+            <span>beach</span>
+            <span>amazing views</span>
+            <span>farms</span>
+            <span>pubs</span>
+            <span>amazing pools</span>
+            <span>beach front</span>
+            <span>countryside</span>
+            <span>tiny homes</span>
+            <span>darshinis</span>
+            <span>earth homes</span>
+            <span>bungalow</span>
+            <span>castles</span>
+            <span>national parks</span>
+            <span>greenland</span>
           </div>
         </div>
-        <NavArrowIcons
-          wrapperStyles={{
-            transition: "$normal",
-            // opacity: `${sliderValue <= totalSteps.current ? "1" : "0"}`,
-            // pointerEvents: `${
-            //   sliderValue <= totalSteps.current ? "auto" : "none"
-            // }`,
-          }}
-          direction="right"
-          clickHandler={() => sliderHandler("+")}
-        />
+
+        <div className={navIconRightWrapper()}>
+          <NavArrowIcons
+            wrapperStyles={{
+              pointerEvents: `${position.isAtEnd ? "none" : "auto"}`,
+            }}
+            direction="right"
+            clickHandler={() => next(1)}
+          />
+        </div>
       </div>
     </>
   );

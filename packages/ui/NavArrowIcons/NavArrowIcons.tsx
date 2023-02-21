@@ -33,10 +33,11 @@ export const NavArrowIcons = ({
     borderRadius: "50%",
     border: `1px solid ${border}`,
     cursor: "pointer",
-    transition: "scale 400ms ease",
+    transition: "$normal",
     outline: "none",
     userSelect: "none",
     background: `${bg}`,
+
     "&:hover": {
       transform: "scale(1.1)",
     },

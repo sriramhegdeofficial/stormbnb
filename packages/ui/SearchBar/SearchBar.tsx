@@ -21,8 +21,9 @@ export const SearchBar = () => {
 };
 
 const wrapper = css({
-  minWidth: "334px",
-  width: "fit-content",
+  minWidth: "280px",
+  width: "100%",
+  maxWidth: "400px",
   height: "50px",
   maxHeight: "50px",
   border: "1px solid $barelyGray",

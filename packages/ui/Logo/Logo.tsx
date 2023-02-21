@@ -96,6 +96,7 @@ export const Logo = ({ variant = "default" }: ILogoProps) => {
 };
 
 const wrapper = css({
+  marginLeft: "-6px",
   width: "fit-content",
   height: "fit-content",
   cursor: "pointer",
