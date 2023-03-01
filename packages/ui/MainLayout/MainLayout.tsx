@@ -17,7 +17,7 @@ export const MainLayout = ({ children }: IPropsMainLayoutProps) => {
 const layout = css({
   width: "100%",
   maxWidth: "100%",
-  border: "1px solid red",
+
   overflowX: "hidden",
   // width: "100%",
   // height: "100%",

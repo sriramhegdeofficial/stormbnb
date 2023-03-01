@@ -1,4 +1,4 @@
-import { createStitches } from '@stitches/core';
+import { createStitches } from '@stitches/react';
 
 export const {
     
@@ -9,6 +9,7 @@ export const {
     theme,
     createTheme,
     config,
+    styled
     
   } = createStitches({
     theme: {

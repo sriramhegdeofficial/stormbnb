@@ -1,15 +1,36 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import {
-  HamburgerMenuIcon,
-  Logo,
-  CategoriesCarousel,
-  SearchBar,
-  ListingCard,
-} from "ui";
+import { HamburgerMenuIcon, Logo, CategoriesCarousel, SearchBar } from "ui";
 import { css } from "ui/stitches.config";
+import dynamic from "next/dynamic";
+import useMediaQuery from "../hooks/useMediaQueryHook";
+import React from "react";
+import { useRouter } from "next/router";
+import ListingCardSkeleton from "./../../../packages/ui/ListingCard/ListingCard.skeleton";
+const ListingCard = dynamic(
+  () => import("./../../../packages/ui/ListingCard/ListingCard"),
+  {
+    ssr: false,
+  }
+);
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const bp2 = useMediaQuery("(min-width: 768px)");
+  const [logoVariant, setLogoVariant] = React.useState<string>("lite");
+  // const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    setLogoVariant(bp2 ? "default" : "lite");
+  }, [bp2]);
+
+  // React.useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 6000);
+  //   console.log(loading);
+  // }, []);
+
   return (
     <>
       <Head>
@@ -31,13 +52,15 @@ const Home: NextPage = () => {
           sizes="16x16"
           href="/images/favicon-16x16.png"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <meta name="viewport" content="width=device-width" />
-        <meta name="viewport" content="width=450, initial-scale=1.0" />
         <title>Welcome | StormBnB</title>
       </Head>
       <div className={header()}>
-        <Logo variant="lite" />
+        <div className={logoWrapper()}>
+          <Logo variant={logoVariant} />
+        </div>
+
         <div className={searchBarWrapperCenter()}>
           <SearchBar />
         </div>
@@ -54,56 +77,44 @@ const Home: NextPage = () => {
 
       <CategoriesCarousel />
       <div className={row()}>
-        <div className={itemWrapper()}>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
         </div>
-      </div>
-      <div className={row()}>
-        <div className={itemWrapper()}>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
         </div>
-      </div>
-      <div className={row()}>
-        <div className={itemWrapper()}>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
-          <div className={cardWrapper()}>
-            <ListingCard />
-          </div>
+        {/* <div className={cardWrapper()}>
+          <ListingCard />
         </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div>
+        <div className={cardWrapper()}>
+          <ListingCard />
+        </div> */}
       </div>
     </>
   );
 };
+
+const logoWrapper = css({
+  flex: 1,
+});
 
 const searchBarWrapper = css({
   display: "flex",
@@ -127,6 +138,7 @@ const menuWrapper = css({
   justifyContent: "flex-end",
   alignItems: "center",
   columnGap: "16px",
+  flex: 1,
 });
 
 const searchBarWrapperBig = css({
@@ -145,6 +157,8 @@ const searchBarWrapperCenter = css({
   display: "none",
   "@bp3": {
     display: "flex",
+    justifyContent: "center",
+    flex: 1,
   },
 });
 
@@ -153,33 +167,23 @@ const row = css({
   height: "max-content",
   display: "flex",
   marginTop: "24px",
-});
-
-const itemWrapper = css({
-  width: "100%",
-  height: "max-content",
-  display: "flex",
-  flexDirection: "row",
-  columnGap: "16px",
+  flexWrap: "wrap",
+  columnGap: "2%",
+  rowGap: "16px",
+  justifyContent: "flex-start",
 });
 
 const cardWrapper = css({
-  flex: 1,
-  "&:nth-child(n+2)": {
-    display: "none",
+  width: "100%",
+  height: "max-content",
+  "@bp1": {
+    width: "49%",
   },
   "@bp2": {
-    "&:nth-child(n+2)": {
-      display: "flex",
-    },
-    "&:nth-child(n+3)": {
-      display: "none",
-    },
+    width: "32%",
   },
   "@bp3": {
-    "&:nth-child(n+3)": {
-      display: "flex",
-    },
+    width: "23.5%",
   },
 });
 

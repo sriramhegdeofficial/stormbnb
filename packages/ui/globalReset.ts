@@ -5,6 +5,7 @@ export const globalStyles = globalCss({
       boxSizing: "border-box",
       margin: '0px',
       padding: '0px',
+      "-webkit-tap-highlight-color": 'transparent',
      },
      '@font-face': [
       {
@@ -20,7 +21,7 @@ export const globalStyles = globalCss({
       width: '100%',
       display: "flex",
       justifyContent: 'center',
-      border: '1px dashed black',
+      
     },
 
     "body": {
@@ -30,13 +31,13 @@ export const globalStyles = globalCss({
       height: 'max-content',
       // border: '10px solid black',
       display: 'flex',
-      maxWidth: "100vw",
-      border: '3px dashed orange',
+      maxWidth: "1800px",
+      
     },
 
     "#__next": {
       width: '100%',
       display: 'flex',
-       border: '5px dashed black',
+      
     }
   });

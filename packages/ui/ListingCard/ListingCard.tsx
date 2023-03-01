@@ -1,14 +1,16 @@
-import { css, theme } from "./../stitches.config";
+import { css, theme, styled } from "./../stitches.config";
 import { globalStyles } from "../globalReset";
 import { AiFillStar } from "react-icons/ai";
 import { NavArrowIcons } from "../NavArrowIcons/NavArrowIcons";
 import Image from "next/image";
 import React from "react";
 import { useCarousel } from "use-carousel-hook";
+import CarouselIndicators from "../CarouselIndicators/CarouselIndicators";
 
-export const ListingCard = () => {
+const ListingCard = () => {
   globalStyles();
-  const { ref, previous, next, position } = useCarousel<HTMLDivElement>();
+  const { ref, previous, next, position, current } =
+    useCarousel<HTMLDivElement>(undefined);
 
   const navArrowRightStyles = {
     position: "absolute",
@@ -24,6 +26,7 @@ export const ListingCard = () => {
       transform: "scale(1.1) translateY(-50%)",
     },
   };
+
   const navArrowLeftStyles = {
     position: "absolute",
     left: "16px",
@@ -39,28 +42,37 @@ export const ListingCard = () => {
     },
   };
 
+  const NavArrowWrapper = styled("div", {
+    opacity: "0",
+    transition: "$normal",
+  });
+
   const wrapper = css({
     flex: "1 0 100%",
     minWidth: "100px",
-    maxWidth: "700px",
-    height: "fit-content",
+    maxWidth: "500px",
+    height: "max-content",
     maxHeight: "400px",
     border: "1px solid rgba(186,186,186,1)",
-    borderRadius: "16px",
+    borderRadius: "8px",
     overflow: "hidden",
     cursor: "pointer",
     transition: "$normal",
     position: "relative",
+
     "&:hover": {
       border: "1px solid rgba(186,186,186,1)",
       boxShadow: "0px 3.6681px 3.6681px rgba(186, 186, 186, 0.7)",
+      [`& ${NavArrowWrapper}`]: {
+        opacity: "1",
+      },
     },
   });
 
   const detailsWrapper = css({
     marginTop: "16px",
     width: "100%",
-    height: "fit-content",
+    height: "60px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -107,8 +119,8 @@ export const ListingCard = () => {
     width: "100%",
     flex: "1 0 auto",
     height: "200px",
-    objectFit: "cover",
-    position: "relative",
+    // objectFit: "cover",
+    zIndex: 0,
     transition: "$normal",
     "&:hover": {
       transform: "scale(1.015)",
@@ -133,57 +145,69 @@ export const ListingCard = () => {
     height: "200px",
     overflow: "hidden",
   });
+  const indicatorsWrapper = css({
+    width: "max-content",
+    height: "max-content",
+    position: "absolute",
+    left: "50%",
+    transform: "translateX(-50%)",
+    bottom: "110px",
+    zIndex: "100",
+  });
 
   return (
     <>
       <div className={wrapper()}>
-        <NavArrowIcons
-          wrapperStyles={navArrowLeftStyles}
-          direction="left"
-          clickHandler={() => previous(1)}
-        />
+        <div className={indicatorsWrapper()}>
+          <CarouselIndicators count={3} currentInd={current} />
+        </div>
+        <NavArrowWrapper>
+          <NavArrowIcons
+            wrapperStyles={navArrowLeftStyles}
+            direction="left"
+            clickHandler={() => previous(1)}
+          />
+        </NavArrowWrapper>
+
         <div className={imageWrapper()} ref={ref}>
           <div className={imageDiv()}>
-            <Image
+            <img
               src="https://picsum.photos/500/360"
               alt="listing image"
-              layout="fill"
+              style={{
+                objectFit: "cover",
+              }}
             />
           </div>
           <div className={imageDiv()}>
-            <Image
-              layout="fill"
+            <img
               src="https://picsum.photos/500/360"
               alt="listing image"
+              style={{
+                objectFit: "cover",
+              }}
             />
           </div>
           <div className={imageDiv()}>
-            <Image
-              layout="fill"
+            <img
               src="https://picsum.photos/500/360"
               alt="listing image"
-            />
-          </div>
-          <div className={imageDiv()}>
-            <Image
-              layout="fill"
-              src="https://picsum.photos/500/360"
-              alt="listing image"
-            />
-          </div>
-          <div className={imageDiv()}>
-            <Image
-              layout="fill"
-              src="https://picsum.photos/500/360"
-              alt="listing image"
+              style={{
+                objectFit: "cover",
+              }}
             />
           </div>
         </div>
-        <NavArrowIcons
-          wrapperStyles={navArrowRightStyles}
-          direction="right"
-          clickHandler={() => next(1)}
-        />
+        <NavArrowWrapper>
+          <NavArrowIcons
+            wrapperStyles={navArrowRightStyles}
+            direction="right"
+            clickHandler={() => {
+              console.log("hello from navIcon");
+              next(1);
+            }}
+          />
+        </NavArrowWrapper>
         <div className={detailsWrapper()}>
           <span className={title()}>CapeTown, SA</span>
           <span className={distance()}>6,300 kilometers away</span>
@@ -198,3 +222,5 @@ export const ListingCard = () => {
     </>
   );
 };
+
+export default ListingCard;
