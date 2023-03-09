@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "msw/mocks/browser.ts"  ],
   "exclude": [
     "node_modules"
   ]
